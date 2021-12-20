@@ -113,6 +113,7 @@ def backtrack(constraints, assignments):
     # Select variable
     variable = variables[0]
 
+    # TODO Check how to do deepcopy to prevent issues here
     for domain in assignments[variable]:
         # Check if we can assign the domain to the variable
         if checkNeighbors(assignments, constraints, variable, domain):
@@ -124,13 +125,28 @@ def backtrack(constraints, assignments):
             if inferences != None:
                 # Recurse
                 assignments = inferences
-                result = backtrack(constraints, assignments)
-                if result != None:
-                    return result
+                assignments = backtrack(constraints, assignments)
+                if assignments != None:
+                    return assignments
         # If we failed then we unassign everything
         assignments = old_assignments
     # Return failure
     return None
+
+def test(val, assign):
+    if val:
+        old = copy.deepcopy(assign)
+        assign[0] = ['R', 'G', 'B']
+        test(False, assign)
+        print(assign)
+        assign = old
+        return assign
+    else:
+        old = copy.deepcopy(assign)
+        assign[0] = ['A', 'B', 'C']
+        print(assign)
+        assign = old
+        return None
 
 def main():
     # Get filename
@@ -142,6 +158,8 @@ def main():
 
     result = backtrack(data['constraints'], data['assignments'])
     print(result)
-    
+
+    test(True, [['T', 'F', 'F']])
+
 if __name__ == "__main__":
     main()
