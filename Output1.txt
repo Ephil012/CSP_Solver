@@ -1,6 +1,6 @@
 NSW = G
 NT = G
-Q = R
-SA = B
-WA = R
-V = R
+Q = B
+SA = R
+WA = B
+V = B

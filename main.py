@@ -29,6 +29,7 @@ def store_data(lines):
     
     # Stores data in dictionary and returns it
     return {
+        'domains': lines[1],
         'assignments': [copy.deepcopy(lines[2]) for i in range(0, int(lines[0][0]))],
         'constraints': lines[3:]
     }
@@ -113,7 +114,6 @@ def backtrack(constraints, assignments):
     # Select variable
     variable = variables[0]
 
-    # TODO Check how to do deepcopy to prevent issues here
     for domain in assignments[variable]:
         # Check if we can assign the domain to the variable
         if checkNeighbors(assignments, constraints, variable, domain):
@@ -125,28 +125,22 @@ def backtrack(constraints, assignments):
             if inferences != None:
                 # Recurse
                 assignments = inferences
-                assignments = backtrack(constraints, assignments)
+                assignments = backtrack(constraints, copy.deepcopy(assignments))
                 if assignments != None:
                     return assignments
-        # If we failed then we unassign everything
-        assignments = old_assignments
+            # If we failed then we unassign everything (might not need to do this technically since we are deep copying)
+            assignments = old_assignments
     # Return failure
     return None
 
-def test(val, assign):
-    if val:
-        old = copy.deepcopy(assign)
-        assign[0] = ['R', 'G', 'B']
-        test(False, assign)
-        print(assign)
-        assign = old
-        return assign
-    else:
-        old = copy.deepcopy(assign)
-        assign[0] = ['A', 'B', 'C']
-        print(assign)
-        assign = old
-        return None
+def display_results(domains, result):
+    # Print results
+    f = open("Output.txt", "w")
+    for i in range(0, len(result)):
+        text = domains[i] + " = " + result[i][0]
+        print(text)
+        f.write(text + "\n")
+    f.close()
 
 def main():
     # Get filename
@@ -157,9 +151,7 @@ def main():
     data = store_data(lines)
 
     result = backtrack(data['constraints'], data['assignments'])
-    print(result)
-
-    test(True, [['T', 'F', 'F']])
+    display_results(data['domains'], result)
 
 if __name__ == "__main__":
     main()
