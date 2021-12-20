@@ -3,6 +3,8 @@
 # AI
 # Dec 2021
 
+import copy
+
 # Reads lines from filename
 def read_file(file_name):
     lines = []
@@ -27,7 +29,7 @@ def store_data(lines):
     
     # Stores data in dictionary and returns it
     return {
-        'assignments': [lines[2] for i in range(0, int(lines[0][0]))],
+        'assignments': [copy.deepcopy(lines[2]) for i in range(0, int(lines[0][0]))],
         'constraints': lines[3:]
     }
 
@@ -86,7 +88,7 @@ def inference(assignments, constraints, var, domain):
             assignments[i].remove(domain)
             if len(assignments[i]) == 0:
                 return None
-    return True
+    return assignments
 
 def backtrack(constraints, assignments):
     # Check if we are done
@@ -115,15 +117,18 @@ def backtrack(constraints, assignments):
         # Check if we can assign the domain to the variable
         if checkNeighbors(assignments, constraints, variable, domain):
             # Keep a copy of old domain in case we fail
-            old_domain = assignments[variable]
+            old_assignments = copy.deepcopy(assignments)
             # Assign domain to variable
             assignments[variable] = [domain]
-            # Recurse
-            result = backtrack(constraints, assignments)
-            if result != None:
-                return result
-            # If we failed then we unassign the domain
-            assignments[variable] = old_domain
+            inferences = inference(assignments, constraints, variable, domain)
+            if inferences != None:
+                # Recurse
+                assignments = inferences
+                result = backtrack(constraints, assignments)
+                if result != None:
+                    return result
+        # If we failed then we unassign everything
+        assignments = old_assignments
     # Return failure
     return None
 
