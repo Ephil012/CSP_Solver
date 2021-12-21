@@ -136,10 +136,14 @@ def backtrack(constraints, assignments):
 def display_results(domains, result):
     # Print results
     f = open("Output.txt", "w")
-    for i in range(0, len(result)):
-        text = domains[i] + " = " + result[i][0]
-        print(text)
-        f.write(text + "\n")
+    if(result == None):
+        f.write("No solution exists")
+        print("No solution exists")
+    else:
+        for i in range(0, len(result)):
+            text = domains[i] + " = " + result[i][0]
+            print(text)
+            f.write(text + "\n")
     f.close()
 
 def main():
