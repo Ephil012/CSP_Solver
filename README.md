@@ -16,7 +16,6 @@ Q = B
 SA = R
 WA = B
 V = B
-
 ```
 ### Output2.txt
 ```
@@ -28,7 +27,6 @@ R5 = B
 R6 = Y
 R7 = R
 R8 = G
-
 ```
 
 ## Code
@@ -183,7 +181,10 @@ def display_results(domains, result):
         for i in range(0, len(result)):
             text = domains[i] + " = " + result[i][0]
             print(text)
-            f.write(text + "\n")
+            if (i < len(result) - 1):
+                f.write(text + "\n")
+            else:
+                f.write(text)
     f.close()
 
 # Main function
