@@ -5,7 +5,7 @@
 
 import copy
 
-# Reads lines from filename
+# Reads lines from filename (takes file_name)
 def read_file(file_name):
     lines = []
     with open(file_name) as f:
@@ -20,7 +20,7 @@ def read_file(file_name):
             lines.append(line)
     return lines
 
-# Stores data in a dictionary based on 2d list inputted
+# Stores data in a dictionary based on 2d list inputted (takes lines)
 def store_data(lines):
     # Converts strings to ints in constraints 2d array
     for i in range(3, len(lines)):
@@ -34,6 +34,7 @@ def store_data(lines):
         'constraints': lines[3:]
     }
 
+# Calculate MRV (takes assignments)
 def mrv(assignments):
     # Holds the max MRV value found
     max = len(assignments[0])
@@ -49,6 +50,7 @@ def mrv(assignments):
             max_items.append(i)
     return max_items
 
+# Calculate degree (takes assignments, constraints, variables)
 def degree(assignments, constraints, variables):
     # Holds the max degree and list of the indexes of the max degree items
     max = 0
@@ -71,7 +73,7 @@ def degree(assignments, constraints, variables):
 
     return max_items
 
-# Checks if we can assign a given color
+# Checks if we can assign a given color (takes assignments, constraints, var, domain)
 def checkNeighbors(assignments, constraints, var, domain):
     # Go through constraints
     row = constraints[var]
@@ -81,6 +83,7 @@ def checkNeighbors(assignments, constraints, var, domain):
                 return False
     return True
 
+# Calculate inference (takes assignments, constraints, var, domain)
 def inference(assignments, constraints, var, domain):
     # Go through constraints
     row = constraints[var]
@@ -91,6 +94,7 @@ def inference(assignments, constraints, var, domain):
                 return None
     return assignments
 
+# Calculate backtrack (takes constraints and assignments)
 def backtrack(constraints, assignments):
     # Check if we are done
     done = True
@@ -133,6 +137,7 @@ def backtrack(constraints, assignments):
     # Return failure
     return None
 
+# Displays results (takes domains and result)
 def display_results(domains, result):
     # Print results
     f = open("Output.txt", "w")
@@ -146,6 +151,7 @@ def display_results(domains, result):
             f.write(text + "\n")
     f.close()
 
+# Main function
 def main():
     # Get filename
     file_name = str(input('Enter the filename: ')).strip()
