@@ -1,4 +1,4 @@
-# AI Project 2: CSP
+# CSP Solver
 
 ## How to run
 Type Down `python3 main.py` in the terminal then input your filename like so
